@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Abood & Loge</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<!-- CANVAS BACKGROUND -->
+<canvas id="bg-canvas"></canvas>
+<!-- CURSOR GLOW -->
+<div id="cursor-glow"></div>
+<div id="cursor-dot"></div>
+<!-- MUSIC BUTTON -->
+<div id="music-btn" aria-label="Toggle music">
+  <div class="music-icon">
+    <span></span><span></span><span></span><span></span><span></span>
+  </div>
+  <audio id="bg-audio" loop preload="none">
+    <!-- User places their own audio file as music.mp3 -->
+    <source src="music.mp3" type="audio/mpeg">
+  </audio>
+</div>
+<!-- ═══════════════════════════════════════ -->
+<!-- INTRO SCREEN -->
+<!-- ═══════════════════════════════════════ -->
+<section id="intro" class="screen">
+  <div id="stars-container"></div>
+  <div id="intro-text" class="intro-phrase">Every story begins somewhere.</div>
+  <div id="heart-container">
+    <div id="heart-glow-ring"></div>
+    <div id="heart" role="button" aria-label="Begin the experience" tabindex="0">
+      <svg viewBox="0 0 100 90" xmlns="http://www.w3.org/2000/svg">
+        <path d="M50 85 C50 85 5 55 5 28 C5 14 16 5 28 5 C37 5 44 10 50 18 C56 10 63 5 72 5 C84 5 95 14 95 28 C95 55 50 85 50 85Z"/>
+      </svg>
+    </div>
+    <p class="heart-hint">tap to begin</p>
+  </div>
+</section>
+<!-- ═══════════════════════════════════════ -->
+<!-- MAIN EXPERIENCE -->
+<!-- ═══════════════════════════════════════ -->
+<main id="main-experience" class="hidden">
+  <!-- HERO -->
+  <section class="scene" id="scene-hero">
+    <div class="scene-inner">
+      <div class="name-reveal">
+        <span class="name-a" data-text="Abood">Abood</span>
+        <div class="ampersand-wrap">
+          <span class="amp">✦</span>
+        </div>
+        <span class="name-b" data-text="Loge">Loge</span>
+      </div>
+      <p class="sub-line">a story worth telling</p>
+    </div>
+    <div class="scroll-hint">
+      <div class="scroll-line"></div>
+    </div>
+  </section>
+  <!-- STORY TEXT — opening lines -->
+  <section class="scene" id="scene-story-1">
+    <div class="story-text">
+      <p class="story-line">A few moments, captured along the way.</p>
+      <p class="story-line">Some from school, some from calls, some from random days.</p>
+    </div>
+  </section>
+  <!-- PHOTO 1 — Fade + Scale reveal -->
+  <section class="scene photo-scene" id="photo-1">
+    <div class="photo-frame fade-scale-frame">
+      <div class="photo-inner">
+        <img src="imgs/1 Medium.jpeg" alt="Memory 1" loading="lazy">
+        <div class="light-sweep"></div>
+      </div>
+      <p class="caption">That moment</p>
+    </div>
+  </section>
+  <!-- STORY TEXT — interlude -->
+  <section class="scene" id="scene-story-2">
+    <div class="story-text">
+      <p class="story-line">A small collection of memories.</p>
+    </div>
+  </section>
+  <!-- PHOTO 2 — 3D Perspective card -->
+  <section class="scene photo-scene" id="photo-2">
+    <div class="perspective-wrap">
+      <div class="photo-card-3d tilt-card">
+        <div class="photo-inner">
+          <img src="imgs/2 Medium.jpeg" alt="Memory 2" loading="lazy">
+        </div>
+        <div class="card-shine"></div>
+      </div>
+      <p class="caption side-caption">Still smiling</p>
+    </div>
+  </section>
+  <!-- PHOTO 3 — Masked horizontal reveal -->
+  <section class="scene photo-scene" id="photo-3">
+    <div class="masked-reveal-wrap">
+      <div class="mask-reveal">
+        <img src="imgs/3 Medium.jpeg" alt="Memory 3" loading="lazy">
+      </div>
+      <p class="caption">Worth it</p>
+    </div>
+  </section>
+  <!-- PHOTO 4 — Floating glass frame -->
+  <section class="scene photo-scene" id="photo-4">
+    <div class="glass-float-frame">
+      <div class="glass-border"></div>
+      <div class="photo-inner">
+        <img src="imgs/4 Medium.jpeg" alt="Memory 4" loading="lazy">
+      </div>
+      <p class="caption">Just us</p>
+    </div>
+  </section>
+  <!-- PHOTO 5 — Parallax split -->
+  <section class="scene photo-scene parallax-scene" id="photo-5">
+    <div class="parallax-photo-wrap">
+      <div class="parallax-img-container">
+        <img src="imgs/5 Medium.jpeg" alt="Memory 5" loading="lazy" class="parallax-img">
+      </div>
+      <p class="caption">Felt real</p>
+    </div>
+  </section>
+  <!-- PHOTO 6 — Blur reveal -->
+  <section class="scene photo-scene" id="photo-6">
+    <div class="blur-reveal-wrap">
+      <div class="blur-photo">
+        <img src="imgs/6 Medium.jpeg" alt="Memory 6" loading="lazy">
+        <div class="blur-overlay"></div>
+      </div>
+      <p class="caption">Coming into focus</p>
+    </div>
+  </section>
+  <!-- HORIZONTAL TIMELINE -->
+  <section class="scene" id="scene-timeline">
+    <div class="timeline-header">
+      <p class="section-label">moments</p>
+    </div>
+    <div id="timeline-track">
+      <div id="timeline-progress-bar"></div>
+      <div id="timeline-nodes">
+        <div class="t-node active" data-index="0">
+          <div class="t-dot"></div>
+          <span class="t-label">Beginning</span>
+        </div>
+        <div class="t-node" data-index="1">
+          <div class="t-dot"></div>
+          <span class="t-label">Laughter</span>
+        </div>
+        <div class="t-node" data-index="2">
+          <div class="t-dot"></div>
+          <span class="t-label">Warmth</span>
+        </div>
+        <div class="t-node" data-index="3">
+          <div class="t-dot"></div>
+          <span class="t-label">Together</span>
+        </div>
+        <div class="t-node" data-index="4">
+          <div class="t-dot"></div>
+          <span class="t-label">Always</span>
+        </div>
+      </div>
+    </div>
+    <div id="timeline-content">
+      <div class="t-content active" data-index="0">
+        <img src="imgs/7 Medium.jpeg" alt="Beginning" loading="lazy">
+        <p class="caption">First spark</p>
+      </div>
+      <div class="t-content" data-index="1">
+        <img src="imgs/8 Medium.jpeg" alt="Laughter" loading="lazy">
+        <p class="caption">Pure joy</p>
+      </div>
+      <div class="t-content" data-index="2">
+        <img src="imgs/9 Medium.jpeg" alt="Warmth" loading="lazy">
+        <p class="caption">So warm</p>
+      </div>
+      <div class="t-content" data-index="3">
+        <img src="imgs/10 Medium.jpeg" alt="Together" loading="lazy">
+        <p class="caption">Side by side</p>
+      </div>
+      <div class="t-content" data-index="4">
+        <img src="imgs/11 Medium.jpeg" alt="Always" loading="lazy">
+        <p class="caption">Every time</p>
+      </div>
+    </div>
+  </section>
+  <!-- PHOTO 7 — Depth reveal (scale + opacity layers) -->
+  <section class="scene photo-scene" id="photo-7">
+    <div class="depth-reveal">
+      <div class="depth-bg">
+        <img src="imgs/12 Medium.jpeg" alt="Memory 12" loading="lazy">
+      </div>
+      <div class="depth-frame"></div>
+      <p class="caption">Deeper still</p>
+    </div>
+  </section>
+  <!-- PHYSICS POLAROIDS -->
+  <section class="scene" id="scene-polaroids">
+    <p class="section-label">pick them up</p>
+    <canvas id="matter-canvas"></canvas>
+  </section>
+  <!-- APPRECIATION -->
+  <section class="scene" id="scene-appreciation">
+    <div class="appreciation-inner">
+      <p class="section-label">with gratitude</p>
+      <h2 class="thanks-title">Special Thanks</h2>
+      <div class="thanks-names">
+        <div class="thanks-name" id="thanks-jana">
+          <div class="name-glow-ring"></div>
+          <span>Jana</span>
+        </div>
+        <div class="thanks-divider">✦</div>
+        <div class="thanks-name" id="thanks-kinda">
+          <div class="name-glow-ring"></div>
+          <span>Kinda</span>
+        </div>
+      </div>
+      <p class="thanks-sub">Who made sure two worlds met.</p>
+      <p class="thanks-extra">For the introduction that made it all possible.</p>
+    </div>
+    <!-- Floating hearts will be injected here -->
+    <div id="hearts-field"></div>
+  </section>
+  <!-- INTERACTIVE QUOTE CARDS -->
+  <section class="scene" id="scene-quotes">
+    <p class="section-label">tap to reveal</p>
+    <div id="quote-cards">
+      <div class="quote-card" tabindex="0" data-revealed="false">
+        <div class="quote-card-front"><span>✦</span></div>
+        <div class="quote-card-back"><p>First met through mutual friends.</p></div>
+      </div>
+      <div class="quote-card" tabindex="0" data-revealed="false">
+        <div class="quote-card-front"><span>✦</span></div>
+        <div class="quote-card-back"><p>Built over time, day by day.</p></div>
+      </div>
+      <div class="quote-card" tabindex="0" data-revealed="false">
+        <div class="quote-card-front"><span>✦</span></div>
+        <div class="quote-card-back"><p>A collection of small, simple moments.</p></div>
+      </div>
+      <div class="quote-card" tabindex="0" data-revealed="false">
+        <div class="quote-card-front"><span>✦</span></div>
+        <div class="quote-card-back"><p>The story continues.</p></div>
+      </div>
+    </div>
+  </section>
+  <!-- FINALE COLLAGE — all 13 images fly together via canvas -->
+  <!-- Preload hint: img 13 -->
+  <img src="imgs/13 Medium.jpeg" alt="" style="display:none" aria-hidden="true">
+  <section class="scene" id="scene-finale">
+    <canvas id="collage-canvas"></canvas>
+    <div id="finale-text">
+      <div class="finale-names">Abood <span class="gold">✦</span> Loge</div>
+      <p class="finale-sub">Every beginning tells a story.</p>
+    </div>
+    <div id="finale-particles"></div>
+  </section>
+</main>
+<!-- RIPPLE CONTAINER -->
+<div id="ripple-container"></div>
+<!-- TOAST NOTIFICATION -->
+<div id="toast"></div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/matter-js/0.19.0/matter.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@studio-freight/lenis@1.0.42/dist/lenis.min.js"></script>
+<script src="script.js"></script>
+</body>
+</html>
