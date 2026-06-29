@@ -676,7 +676,7 @@ function initPolaroids() {
     const ph = pw * 1.1; // polaroid ratio
 
     const img = new Image();
-    img.src = `imgs/${src}`;
+    img.src = `Imgs/${src}`;
 
     const body = Bodies.rectangle(x, y, pw, ph, {
       restitution: 0.3,
@@ -852,18 +852,25 @@ function initFinale() {
 
   const finalText = document.getElementById('finale-text');
 
-  // Layout for 13 images in a tidy grid, leaving a clear band in the middle for the text
+  const FINALE_COUNT = 12; // exactly 12 photos placed around the name
+
+  // Layout: a ring of 12 equal squares around the centered name/text
   function calcLayout() {
     const cols = W < 700 ? 3 : 4;
-    const rows = 5; // middle row (index 2) stays empty for the text band
+    const rows = 4;
     const cellW = W / cols;
     const cellH = H / rows;
-    const size = Math.min(cellW, cellH) * 0.78; // square cell, never stretched
+    // Match the square photo size used elsewhere on the site, capped to fit the screen
+    const matchSize = Math.min(420, W * 0.8);
+    const size = Math.min(cellW, cellH, matchSize) * 0.86;
+
+    const centerCols = cols === 3 ? [1] : [1, 2];
+    const centerRows = [1, 2];
 
     const slots = [];
     for (let r = 0; r < rows; r++) {
-      if (r === 2) continue; // reserved for #finale-text
       for (let c = 0; c < cols; c++) {
+        if (centerRows.includes(r) && centerCols.includes(c)) continue; // reserved for #finale-text
         slots.push({
           tx: cellW * (c + 0.5),
           ty: cellH * (r + 0.5)
@@ -872,7 +879,7 @@ function initFinale() {
     }
 
     positions.length = 0;
-    for (let i = 0; i < IMG_COUNT; i++) {
+    for (let i = 0; i < FINALE_COUNT; i++) {
       const slot = slots[i % slots.length];
       positions.push({
         tx: slot.tx,
@@ -887,11 +894,11 @@ function initFinale() {
   }
 
   // Load images
-  for (let i = 1; i <= IMG_COUNT; i++) {
+  for (let i = 1; i <= FINALE_COUNT; i++) {
     const img = new Image();
-    img.src = `imgs/${i} Medium.jpeg`;
-    img.onload = () => { loaded++; if (loaded === IMG_COUNT) startCollageAnim(); };
-    img.onerror = () => { loaded++; if (loaded === IMG_COUNT) startCollageAnim(); };
+    img.src = `Imgs/${i} Medium.jpeg`;
+    img.onload = () => { loaded++; if (loaded === FINALE_COUNT) startCollageAnim(); };
+    img.onerror = () => { loaded++; if (loaded === FINALE_COUNT) startCollageAnim(); };
     images.push(img);
   }
 
@@ -1082,4 +1089,4 @@ document.addEventListener('visibilitychange', () => {
 
 // Preload first image immediately
 const preloadFirst = new Image();
-preloadFirst.src = 'imgs/1 Medium.jpeg';
+preloadFirst.src = 'Imgs/1 Medium.jpeg';
