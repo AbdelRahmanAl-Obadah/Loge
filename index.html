@@ -878,9 +878,55 @@ body{
 @media(prefers-reduced-motion:reduce){
   *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}
 }
+/* ═══════ PROTECTION LAYER ═══════ */
+*{
+  -webkit-user-select:none!important;
+  -moz-user-select:none!important;
+  -ms-user-select:none!important;
+  user-select:none!important;
+  -webkit-touch-callout:none!important;
+}
+img{
+  pointer-events:none!important;
+  -webkit-user-drag:none!important;
+  -khtml-user-drag:none!important;
+  -moz-user-drag:none!important;
+  -o-user-drag:none!important;
+  user-drag:none!important;
+  -webkit-touch-callout:none!important;
+}
+body.privacy-blur::before{
+  content:'';
+  position:fixed;
+  inset:0;
+  z-index:999999;
+  background:var(--void);
+  backdrop-filter:blur(40px) saturate(0);
+  -webkit-backdrop-filter:blur(40px) saturate(0);
+}
+body.privacy-blur *{
+  filter:blur(40px) brightness(0.1)!important;
+}
+#privacy-lock{
+  display:none;
+  position:fixed;
+  inset:0;
+  z-index:1000000;
+  background:var(--void);
+  color:var(--gold);
+  font-family:var(--fd);
+  font-size:1.4rem;
+  letter-spacing:.05em;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+  padding:2rem;
+}
+#privacy-lock.active{display:flex}
 </style>
 </head>
 <body>
+<div id="privacy-lock">هذا المحتوى خاص جداً 🤍<br>الرجاء العودة إليه بنفسك</div>
 
 <!-- HEARTS RAIN -->
 <div id="hearts-rain"></div>
@@ -2348,6 +2394,93 @@ console.log('♡ Abood & Loge — with love');
       }
     }
   },{passive:true});
+})();
+</script>
+
+<script>
+/* ═══════ PRIVACY / ANTI-CAPTURE LAYER ═══════
+   ملاحظة مهمة: ما في طريقة تقنية تمنع سكرين شوت/سكرين ريكورد على مستوى نظام التشغيل من موقع ويب —
+   هاي الطبقة بتسوي "ردع" قوي (تعطيل حفظ الصور، النسخ، اختصارات الكيبورد، وبلur فوري عند فقدان التركيز)
+   بس مش ضمان 100%. */
+(function(){
+  'use strict';
+
+  const body = document.body;
+  const lock = document.getElementById('privacy-lock');
+
+  // 1) Right-click / context menu off
+  document.addEventListener('contextmenu', e=>e.preventDefault());
+
+  // 2) Block drag-out of images
+  document.addEventListener('dragstart', e=>{
+    if(e.target.tagName==='IMG') e.preventDefault();
+  });
+
+  // 3) Block text/image selection start
+  document.addEventListener('selectstart', e=>e.preventDefault());
+
+  // 4) Block copy
+  document.addEventListener('copy', e=>e.preventDefault());
+
+  // 5) Block common screenshot / devtools / save / print shortcuts
+  document.addEventListener('keydown', e=>{
+    const k = e.key;
+    const blocked =
+      k === 'PrintScreen' ||
+      (e.metaKey && e.shiftKey && ['3','4','5','6'].includes(k)) || // mac screenshot combos
+      (e.ctrlKey && e.shiftKey && ['s','S'].includes(k)) || // windows snip
+      (e.ctrlKey && ['s','S','u','U','p','P'].includes(k)) ||
+      k === 'F12' ||
+      (e.ctrlKey && e.shiftKey && ['i','I','j','J','c','C'].includes(k));
+    if(blocked){
+      e.preventDefault();
+      e.stopPropagation();
+      if(k==='PrintScreen'){
+        navigator.clipboard && navigator.clipboard.writeText('').catch(()=>{});
+        flashLock(1400);
+      }
+      return false;
+    }
+  }, true);
+
+  // 6) Blur the whole page instantly when tab/window loses focus or app goes to background
+  function engageBlur(){ body.classList.add('privacy-blur'); }
+  function releaseBlur(){ body.classList.remove('privacy-blur'); }
+
+  document.addEventListener('visibilitychange', ()=>{
+    document.hidden ? engageBlur() : releaseBlur();
+  });
+  window.addEventListener('blur', engageBlur);
+  window.addEventListener('focus', releaseBlur);
+  window.addEventListener('pagehide', engageBlur);
+
+  function flashLock(ms){
+    lock.classList.add('active');
+    setTimeout(()=>lock.classList.remove('active'), ms);
+  }
+
+  // 7) Lightweight DevTools-open heuristic (best-effort only)
+  let devtoolsOpen = false;
+  const threshold = 160;
+  setInterval(()=>{
+    const widthGap = window.outerWidth - window.innerWidth > threshold;
+    const heightGap = window.outerHeight - window.innerHeight > threshold;
+    if((widthGap || heightGap) && !devtoolsOpen){
+      devtoolsOpen = true;
+      engageBlur();
+    } else if(!widthGap && !heightGap && devtoolsOpen){
+      devtoolsOpen = false;
+      releaseBlur();
+    }
+  }, 800);
+
+  // 8) Disable image saving via long-press on touch devices
+  document.addEventListener('touchstart', e=>{
+    if(e.target.tagName==='IMG'){
+      e.target.style.webkitTouchCallout = 'none';
+    }
+  }, {passive:true});
+
 })();
 </script>
 </body>
