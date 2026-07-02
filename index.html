@@ -2252,8 +2252,7 @@ console.log('♡ Abood & Loge — with love');
     const days = Math.floor(diff / (1000*60*60*24));
     const hrs  = Math.floor((diff%(1000*60*60*24))/(1000*60*60));
     const mins = Math.floor((diff%(1000*60*60))/(1000*60));
-    txt.textContent = `♡ ${days} يوم و${hrs} ساعة و${mins} دقيقة من أول ily`;
-  }
+txt.textContent = `♡ ${days} days, ${hrs} hours, and ${mins} minutes since our first "I love you"`;  }
   update();
   setInterval(update, 60000);
   // Show after intro
